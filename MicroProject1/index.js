@@ -20,36 +20,36 @@ MongoClient.connect(
       db.collection(Hos)
         .find()
         .toArray()
-        .then((result) => res.json(result));
+        .then((result) => res.send(result));
     });
     app.get("/showAllVents", middleware.checkToken, (req, res) => {
       db.collection(Vents)
         .find()
         .toArray()
-        .then((result) => res.json(result));
+        .then((result) => res.send(result));
     });
     app.post("/vStatus", middleware.checkToken, (req, res) => {
       db.collection(Vents)
         .find({ status: req.body.status })
         .toArray()
-        .then((result) => res.json(result));
+        .then((result) => res.send(result));
     });
-    app.post("/vStatusByHName", middleware.checkToken, (req, res) => {
+    app.post("/vStatusByHospName", middleware.checkToken, (req, res) => {
       db.collection(Vents)
         .find({ name: req.body.hospname })
         .toArray()
-        .then((result) => res.json(result));
+        .then((result) => res.send(result));
     });
-    app.post("/hosDetailsByHName", middleware.checkToken, (req, res) => {
+    app.post("/getHospDetailsByName", middleware.checkToken, (req, res) => {
       db.collection(Hos)
         .find({ name: req.body.hospname })
         .toArray()
-        .then((result) => res.json(result));
+        .then((result) => res.send(result));
     });
     app.post("/addNewVent", middleware.checkToken, (req, res) => {
       db.collection(Vents).insert({
-        hId: req.body.nhId,
-        ventilatorId: req.body.nvId,
+        hid: req.body.nhId,
+        ventid: req.body.nvId,
         status: req.body.nstatus,
         name: req.body.nname,
       });
@@ -57,7 +57,7 @@ MongoClient.connect(
     app.put("/updateVentStatus", middleware.checkToken, (req, res) => {
       db.collection(Vents)
         .updateOne(
-          { ventilatorId: req.body.ventId },
+          { ventid: req.body.ventId },
           { $set: { status: req.body.ventStatus } }
         )
         .then(() =>
@@ -68,7 +68,7 @@ MongoClient.connect(
     });
     app.delete("/removeVent", middleware.checkToken, (req, res) => {
       db.collection(Vents)
-        .deleteOne({ ventilatorId: req.body.vId })
+        .deleteOne({ ventid: req.body.vId })
         .then(() =>
           res.json({
             message: "Done",
